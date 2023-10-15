@@ -39,4 +39,11 @@ function operate(operator, a, b) {
   return result;
 }
 
-console.log(operate('/', 1, 2));
+const buttons = document.querySelectorAll('button');
+const display = document.querySelector('.display')
+
+buttons.forEach(button => button.addEventListener('click', () => {
+  if (button.innerText != 'Clear' && button.innerText != 'Del') {
+    display.innerText += button.innerText;
+  }
+}))
