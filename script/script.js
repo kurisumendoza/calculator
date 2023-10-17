@@ -62,13 +62,9 @@ buttons.forEach(button => button.addEventListener('click', () => {
 }));
 
 function numberButtons(button) {
-  if (resultDisplay.textContent != 0) {
-    if (/[\+\-\*\/]/g.test(computationDisplay.textContent)) {
-      computationDisplay.textContent += button.textContent;      
-    } else {
-      clear();
-      computationDisplay.textContent += button.textContent;
-    }
+  if (resultDisplay.textContent != 0 && resultDisplay.classList.contains('evaluated')) {
+    clear();
+    computationDisplay.textContent += button.textContent;
   } else {
     computationDisplay.textContent += button.textContent;
   }
@@ -94,6 +90,7 @@ function addDecimal(button) {
 function clear(button) {
   computationDisplay.textContent = '';
   resultDisplay.textContent = '0';
+  resultDisplay.classList.remove('evaluated');
   operators.forEach(item => item.classList.remove('clicked'));
   document.querySelector('.decimal').classList.remove('ticked');
 }
@@ -128,6 +125,7 @@ function operatorButtons(button) {
       computationDisplay.textContent = resultDisplay.textContent;
       computationDisplay.textContent += ` ${button.textContent} `;
     }
+    resultDisplay.classList.remove('evaluated');
   } else {
     operators.forEach(item => item.classList.add('clicked'))
     computationDisplay.textContent += ` ${button.textContent} `;
@@ -138,10 +136,14 @@ function isEqualTo(button) {
   splitEquation();
   if (!operator) {
     resultDisplay.textContent = firstValue;
+    if (firstValue != 0) {
+      resultDisplay.classList.add('evaluated');
+    }
   } else if (!secondValue) {
     console.log('invalid');
   } else {
     resultDisplay.textContent = operate(operator, firstValue, secondValue);
+    resultDisplay.classList.add('evaluated');
   }
 }
 
