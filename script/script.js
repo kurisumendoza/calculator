@@ -110,6 +110,9 @@ function deleteChar(button) {
   if (lastNum === '.') {
     decimalCheck.classList.remove('ticked');
   }
+  if (resultDisplay.textContent != 0) {
+    resultDisplay.textContent = 0;
+  }
   computationDisplay.innerText = computationDisplay.innerText.slice(0, -1);
   console.log(lastNum);
 }
@@ -141,6 +144,4 @@ function isEqualTo(button) {
     resultDisplay.textContent = operate(operator, firstValue, secondValue);
     console.log(computationArray);
   }
-
-  
 }
