@@ -128,15 +128,19 @@ function operatorButtons(button) {
 }
 
 function isEqualTo(button) {
-  if (!computationDisplay.textContent) {
-    console.log('empty');
+  const computationArray = computationDisplay.innerText.split(' ');
+  firstValue = Number(computationArray[0]);
+  secondValue = Number(computationArray[2]);
+  operator = computationArray[1];
+  if (!operator) {
+    resultDisplay.textContent = firstValue;
+    console.log(computationArray);
+  } else if (!secondValue) {
+    console.log('invalid');
   } else {
-    const computationArray = computationDisplay.innerText.split(' ');
-    firstValue = Number(computationArray[0]);
-    secondValue = Number(computationArray[2]);
-    operator = computationArray[1];
     resultDisplay.textContent = operate(operator, firstValue, secondValue);
-  
     console.log(computationArray);
   }
+
+  
 }
