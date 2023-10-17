@@ -69,8 +69,14 @@ buttons.forEach(button => button.addEventListener('click', () => {
 
 function numberButtons(button) {
   if (resultDisplay.textContent != 0) {
-    clear();
-    computationDisplay.textContent += button.textContent;
+    const lastNum = computationDisplay.innerText.charAt(computationDisplay.innerText.length -1);
+    const operatorArray = ['+', '-', '*', '/']; 
+    if (operatorArray.includes(lastNum)) {
+      computationDisplay.textContent += button.textContent;      
+    } else {
+      clear();
+      computationDisplay.textContent += button.textContent;
+    }
   } else {
     computationDisplay.textContent += button.textContent;
   }
@@ -133,7 +139,6 @@ function operatorButtons(button) {
       resultDisplay.textContent = operate(operator, firstValue, secondValue);
       computationDisplay.textContent = resultDisplay.textContent;
       computationDisplay.textContent += ` ${button.textContent} `;
-      resultDisplay.textContent = 0;
     }
   } else {
     operators.forEach(item => item.classList.add('clicked'))
@@ -143,10 +148,7 @@ function operatorButtons(button) {
 }
 
 function isEqualTo(button) {
-  const computationArray = computationDisplay.innerText.split(' ');
-  firstValue = Number(computationArray[0]);
-  secondValue = Number(computationArray[2]);
-  operator = computationArray[1];
+  splitEquation();
   if (!operator) {
     resultDisplay.textContent = firstValue;
     console.log(computationArray);
@@ -154,6 +156,12 @@ function isEqualTo(button) {
     console.log('invalid');
   } else {
     resultDisplay.textContent = operate(operator, firstValue, secondValue);
-    console.log(computationArray);
   }
+}
+
+function splitEquation() {
+  const computationArray = computationDisplay.innerText.split(' ');
+  firstValue = Number(computationArray[0]);
+  secondValue = Number(computationArray[2]);
+  operator = computationArray[1];
 }
