@@ -36,7 +36,7 @@ function operate(operator, a, b) {
       result = operation.function(a, b);
     }
   })
-  return result.toString().substring(0, 12);
+  return result;
 }
 
 const buttons = document.querySelectorAll('button');
@@ -101,6 +101,9 @@ function deleteChar(button) {
   const operatorArray = ['+', '-', '*', '/']; 
   if (operatorArray.includes(lastNum)) {
     operators.forEach(item => item.classList.remove('clicked'));
+    computationDisplay.innerText = computationDisplay.innerText.slice(0, -2);
+  } else {
+    computationDisplay.innerText = computationDisplay.innerText.slice(0, -1);
   }
   if (lastNum === '.') {
     decimalCheck.classList.remove('ticked');
@@ -108,7 +111,6 @@ function deleteChar(button) {
   if (resultDisplay.textContent != 0) {
     resultDisplay.textContent = 0;
   }
-  computationDisplay.innerText = computationDisplay.innerText.slice(0, -1);
 }
 
 function operatorButtons(button) {
@@ -145,6 +147,10 @@ function isEqualTo(button) {
     resultDisplay.textContent = operate(operator, firstValue, secondValue);
     resultDisplay.classList.add('evaluated');
   }
+  // saving code for later if limiting the length of result is needed
+  // if (resultDisplay.textContent.length > 12) {
+  //   resultDisplay.textContent = resultDisplay.textContent.substring(0, 12)
+  // }
 }
 
 function splitEquation() {
