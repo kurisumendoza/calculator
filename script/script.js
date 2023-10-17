@@ -68,7 +68,12 @@ buttons.forEach(button => button.addEventListener('click', () => {
 }));
 
 function numberButtons(button) {
-  computationDisplay.textContent += button.textContent;
+  if (resultDisplay.textContent != 0) {
+    clear();
+    computationDisplay.textContent += button.textContent;
+  } else {
+    computationDisplay.textContent += button.textContent;
+  }
 }
 
 function addDecimal(button) {
@@ -78,6 +83,10 @@ function addDecimal(button) {
     computationDisplay.textContent += '0.';
   } else if (lastNum === '.' || button.classList.contains('ticked')) {
     console.log('do nothing');
+  } else if (resultDisplay.textContent != 0) {
+    computationDisplay.textContent = '';
+    resultDisplay.textContent = 0;
+    computationDisplay.textContent += '0.';
   } else {
     computationDisplay.textContent += button.textContent;
     button.classList.add('ticked')
@@ -106,9 +115,10 @@ function deleteChar(button) {
 }
 
 function operatorButtons(button) {
+  const lastNum = computationDisplay.innerText.charAt(computationDisplay.innerText.length -1);
   if (!computationDisplay.textContent) {
     console.log('empty');
-  } else if (button.classList.contains('clicked')) {
+  } else if (button.classList.contains('clicked') || lastNum === '.') {
     console.log(true);
   } else {
     operators.forEach(item => item.classList.add('clicked'))
