@@ -36,7 +36,7 @@ function operate(operator, a, b) {
       result = operation.function(a, b);
     }
   })
-  return result;
+  return result.toString().substring(0, 12);
 }
 
 const buttons = document.querySelectorAll('button');
@@ -106,26 +106,27 @@ function deleteChar(button) {
 }
 
 function operatorButtons(button) {
-  if (button.classList.contains('clicked')) {
+  if (!computationDisplay.textContent) {
+    console.log('empty');
+  } else if (button.classList.contains('clicked')) {
     console.log(true);
   } else {
     operators.forEach(item => item.classList.add('clicked'))
     computationDisplay.textContent += ` ${button.textContent} `;
-    console.log(false)
+    console.log(false);
   };
 }
 
 function isEqualTo(button) {
-  const computationArray = computationDisplay.innerText.split(' ');
-  firstValue = Number(computationArray[0]);
-  secondValue = Number(computationArray[2]);
-  operator = computationArray[1];
-  resultDisplay.textContent = operate(operator, firstValue, secondValue);
-
-  console.log(computationArray);
-
+  if (!computationDisplay.textContent) {
+    console.log('empty');
+  } else {
+    const computationArray = computationDisplay.innerText.split(' ');
+    firstValue = Number(computationArray[0]);
+    secondValue = Number(computationArray[2]);
+    operator = computationArray[1];
+    resultDisplay.textContent = operate(operator, firstValue, secondValue);
+  
+    console.log(computationArray);
+  }
 }
-
-let string = '5+57'
-let test = string.split('');
-console.log(test);
