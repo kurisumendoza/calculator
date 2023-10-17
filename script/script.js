@@ -119,10 +119,22 @@ function deleteChar(button) {
 
 function operatorButtons(button) {
   const lastNum = computationDisplay.innerText.charAt(computationDisplay.innerText.length -1);
+  const operatorArray = ['+', '-', '*', '/']; 
   if (!computationDisplay.textContent) {
     console.log('empty');
   } else if (button.classList.contains('clicked') || lastNum === '.') {
-    console.log(true);
+    const computationArray = computationDisplay.innerText.split(' ');
+    firstValue = Number(computationArray[0]);
+    secondValue = Number(computationArray[2]);
+    operator = computationArray[1];
+    if (!secondValue) {
+      console.log('invalid');
+    } else {
+      resultDisplay.textContent = operate(operator, firstValue, secondValue);
+      computationDisplay.textContent = resultDisplay.textContent;
+      computationDisplay.textContent += ` ${button.textContent} `;
+      resultDisplay.textContent = 0;
+    }
   } else {
     operators.forEach(item => item.classList.add('clicked'))
     computationDisplay.textContent += ` ${button.textContent} `;
