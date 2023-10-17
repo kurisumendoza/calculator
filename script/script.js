@@ -48,30 +48,22 @@ resultDisplay.textContent = 0;
 buttons.forEach(button => button.addEventListener('click', () => {
   if (button.classList.contains('number')) {
     numberButtons(button);
-    console.log('number');
   } else if (button.classList.contains('decimal')) {
     addDecimal(button);
-    console.log('decimal');
   } else if (button.classList.contains('operator')) {
     operatorButtons(button)
-    console.log('operator');
   } else if (button.classList.contains('clear')) {
     clear(button);
-    console.log('clear');
   } else if (button.classList.contains('delete')) {
     deleteChar(button);
-    console.log('delete');
   } else if (button.classList.contains('equals')) {
     isEqualTo(button);
-    console.log('equals');
   }
 }));
 
 function numberButtons(button) {
   if (resultDisplay.textContent != 0) {
-    const lastNum = computationDisplay.innerText.charAt(computationDisplay.innerText.length -1);
-    const operatorArray = ['+', '-', '*', '/']; 
-    if (operatorArray.includes(lastNum)) {
+    if (/[\+\-\*\/]/g.test(computationDisplay.textContent)) {
       computationDisplay.textContent += button.textContent;      
     } else {
       clear();
@@ -120,7 +112,6 @@ function deleteChar(button) {
     resultDisplay.textContent = 0;
   }
   computationDisplay.innerText = computationDisplay.innerText.slice(0, -1);
-  console.log(lastNum);
 }
 
 function operatorButtons(button) {
@@ -129,10 +120,7 @@ function operatorButtons(button) {
   if (!computationDisplay.textContent) {
     console.log('empty');
   } else if (button.classList.contains('clicked') || lastNum === '.') {
-    const computationArray = computationDisplay.innerText.split(' ');
-    firstValue = Number(computationArray[0]);
-    secondValue = Number(computationArray[2]);
-    operator = computationArray[1];
+    splitEquation();
     if (!secondValue) {
       console.log('invalid');
     } else {
@@ -143,7 +131,6 @@ function operatorButtons(button) {
   } else {
     operators.forEach(item => item.classList.add('clicked'))
     computationDisplay.textContent += ` ${button.textContent} `;
-    console.log(false);
   };
 }
 
@@ -151,7 +138,6 @@ function isEqualTo(button) {
   splitEquation();
   if (!operator) {
     resultDisplay.textContent = firstValue;
-    console.log(computationArray);
   } else if (!secondValue) {
     console.log('invalid');
   } else {
