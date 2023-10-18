@@ -97,7 +97,6 @@ function addDecimal(button) {
       firstValue.textContent += button.textContent;
     }
   }
-
 }
 
 function clear(button) {
@@ -126,7 +125,8 @@ function deleteChar(button) {
 
 function operatorButtons(button) {
   if (!firstValue.textContent) {
-    console.log('do nothing');
+    firstValue.textContent = '0';
+    operator.textContent = button.textContent;
   } else if (operator.textContent && secondValue.textContent) {
     resultDisplay.textContent = operate(operator.textContent, Number(firstValue.textContent), Number(secondValue.textContent));
     if (resultDisplay.textContent.length <= 12 && (resultDisplay.textContent < 10000000 && resultDisplay.textContent > -10000000)) {
@@ -136,10 +136,12 @@ function operatorButtons(button) {
     } else {
       console.log('error');
     }
-  }
-  else {
+  } else {
     operator.textContent = button.textContent;
     firstValue.classList.add('filled');
+  }
+  if (!secondValue.textContent) {
+    firstValue.textContent = Number(firstValue.textContent);
   }
   if (resultDisplay.textContent.length > 14) {
     resultDisplay.textContent = resultDisplay.textContent.substring(0, 14)
@@ -152,7 +154,7 @@ function isEqualTo(button) {
     if (!firstValue.textContent) {
       resultDisplay.textContent = 0;
     } else {
-      resultDisplay.textContent = firstValue.textContent;
+      resultDisplay.textContent = Number(firstValue.textContent);
     }
   } else {
     resultDisplay.textContent = firstValue
@@ -160,6 +162,12 @@ function isEqualTo(button) {
   }
   if (resultDisplay.textContent.length > 14) {
     resultDisplay.textContent = resultDisplay.textContent.substring(0, 14)
+  }
+  if (!secondValue.textContent) {
+    firstValue.textContent = Number(firstValue.textContent);
+  } else {
+    firstValue.textContent = Number(firstValue.textContent);
+    secondValue.textContent = Number(secondValue.textContent);
   }
   resultDisplay.classList.add('evaluated');
 }
