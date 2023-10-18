@@ -66,11 +66,19 @@ function numberButtons(button) {
   }
   if (firstValue.classList.contains('filled')) {
     if (secondValue.textContent.length <= 12 && (secondValue.textContent < 1000000 && secondValue.textContent > -1000000)) {
-      secondValue.textContent += button.textContent;
+      if (secondValue.textContent.charAt(0) === '0' && !secondValue.textContent.includes('.')) {
+        if (!button.classList.contains('zero')) {
+          secondValue.textContent = secondValue.textContent.replace('0', button.textContent)
+        }
+      } else secondValue.textContent += button.textContent;
     }
   } else {
     if (firstValue.textContent.length <= 12 && (firstValue.textContent < 1000000 && firstValue.textContent > -1000000)) {
-      firstValue.textContent += button.textContent;
+      if (firstValue.textContent.charAt(0) === '0' && !firstValue.textContent.includes('.')) {
+        if (!button.classList.contains('zero')) {
+          firstValue.textContent = firstValue.textContent.replace('0', button.textContent)
+        }
+      } else firstValue.textContent += button.textContent;
     }
   }
 }
