@@ -62,6 +62,10 @@ buttons.forEach(button => button.addEventListener('click', () => {
 }));
 
 function numberButtons(button) {
+  limitCharacters();
+  if (computationDisplay.classList.contains('exceeded')) {
+    console.log('exceeded');
+  } else
   if (resultDisplay.textContent != 0 && resultDisplay.classList.contains('evaluated')) {
     clear();
     computationDisplay.textContent += button.textContent;
@@ -73,9 +77,10 @@ function numberButtons(button) {
 function addDecimal(button) {
   const lastNum = computationDisplay.innerText.charAt(computationDisplay.innerText.length -1);
   const operatorArray = ['+', '-', '*', '/'];
+  limitCharacters();
   if (!computationDisplay.textContent || operatorArray.includes(lastNum)) {
     computationDisplay.textContent += '0.';
-  } else if (lastNum === '.' || button.classList.contains('ticked')) {
+  } else if (lastNum === '.' || button.classList.contains('ticked') || computationDisplay.classList.contains('exceeded')) {
     console.log('do nothing');
   } else if (resultDisplay.textContent != 0) {
     computationDisplay.textContent = '';
@@ -93,6 +98,7 @@ function clear(button) {
   resultDisplay.classList.remove('evaluated');
   operators.forEach(item => item.classList.remove('clicked'));
   document.querySelector('.decimal').classList.remove('ticked');
+  computationDisplay.classList.remove('exceeded');
 }
 
 function deleteChar(button) {
@@ -111,12 +117,13 @@ function deleteChar(button) {
   if (resultDisplay.textContent != 0) {
     resultDisplay.textContent = 0;
   }
+  computationDisplay.classList.remove('exceeded');
 }
 
 function operatorButtons(button) {
   const lastNum = computationDisplay.innerText.charAt(computationDisplay.innerText.length -1);
-  const operatorArray = ['+', '-', '*', '/']; 
-  if (!computationDisplay.textContent) {
+  limitCharacters();
+  if (!computationDisplay.textContent || computationDisplay.classList.contains('exceeded')) {
     console.log('empty');
   } else if (button.classList.contains('clicked') || lastNum === '.') {
     splitEquation();
@@ -147,10 +154,9 @@ function isEqualTo(button) {
     resultDisplay.textContent = operate(operator, firstValue, secondValue);
     resultDisplay.classList.add('evaluated');
   }
-  // saving code for later if limiting the length of result is needed
-  // if (resultDisplay.textContent.length > 12) {
-  //   resultDisplay.textContent = resultDisplay.textContent.substring(0, 12)
-  // }
+  if (resultDisplay.textContent.length > 12) {
+    resultDisplay.textContent = resultDisplay.textContent.substring(0, 12)
+  }
 }
 
 function splitEquation() {
@@ -158,4 +164,12 @@ function splitEquation() {
   firstValue = Number(computationArray[0]);
   secondValue = Number(computationArray[2]);
   operator = computationArray[1];
+}
+
+function limitCharacters() {
+  let exemptSpaces = computationDisplay.textContent.replace(/ /g, '').length;
+  console.log(exemptSpaces);
+  if (exemptSpaces >= 24) {
+    computationDisplay.classList.add('exceeded');
+  }
 }
