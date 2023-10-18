@@ -1,6 +1,6 @@
-let firstValue;
-let secondValue;
-let operator;
+let firstValue = document.querySelector('.first-value');
+let operator = document.querySelector('.displayed-operator')
+let secondValue = document.querySelector('.second-value');
 
 const operations = [
   {
@@ -41,7 +41,6 @@ function operate(operator, a, b) {
 
 const buttons = document.querySelectorAll('button');
 const operators = document.querySelectorAll('.operator');
-const computationDisplay = document.querySelector('.computation-display');
 const resultDisplay = document.querySelector('.result-display');
 resultDisplay.textContent = 0;
 
@@ -62,114 +61,97 @@ buttons.forEach(button => button.addEventListener('click', () => {
 }));
 
 function numberButtons(button) {
-  limitCharacters();
-  if (computationDisplay.classList.contains('exceeded')) {
-    console.log('exceeded');
-  } else
-  if (resultDisplay.textContent != 0 && resultDisplay.classList.contains('evaluated')) {
+  if (resultDisplay.classList.contains('evaluated')) {
     clear();
-    computationDisplay.textContent += button.textContent;
+  }
+  if (firstValue.classList.contains('filled')) {
+    if (secondValue.textContent.length <= 12 && (secondValue.textContent < 1000000 && secondValue.textContent > -1000000)) {
+      secondValue.textContent += button.textContent;
+    }
   } else {
-    computationDisplay.textContent += button.textContent;
+    if (firstValue.textContent.length <= 12 && (firstValue.textContent < 1000000 && firstValue.textContent > -1000000)) {
+      firstValue.textContent += button.textContent;
+    }
   }
 }
 
 function addDecimal(button) {
-  const lastNum = computationDisplay.innerText.charAt(computationDisplay.innerText.length -1);
-  const operatorArray = ['+', '-', '*', '/'];
-  limitCharacters();
-  if (!computationDisplay.textContent || operatorArray.includes(lastNum)) {
-    computationDisplay.textContent += '0.';
-  } else if (lastNum === '.' || button.classList.contains('ticked') || computationDisplay.classList.contains('exceeded')) {
-    console.log('do nothing');
-  } else if (resultDisplay.textContent != 0) {
-    computationDisplay.textContent = '';
-    resultDisplay.textContent = 0;
-    computationDisplay.textContent += '0.';
+  if (firstValue.classList.contains('filled')) {
+    if (!secondValue.textContent) {
+      secondValue.textContent += '0.';
+    } else if (!secondValue.textContent.includes('.')) {
+      secondValue.textContent += button.textContent;
+    }
   } else {
-    computationDisplay.textContent += button.textContent;
-    button.classList.add('ticked')
+    if (!firstValue.textContent) {
+      firstValue.textContent += '0.';
+    } else if (!firstValue.textContent.includes('.')) {
+      firstValue.textContent += button.textContent;
+    }
   }
+
 }
 
 function clear(button) {
-  computationDisplay.textContent = '';
+  firstValue.textContent = '';
+  firstValue.classList.remove('filled');
+  operator.textContent = '';
+  secondValue.textContent = '';
   resultDisplay.textContent = '0';
   resultDisplay.classList.remove('evaluated');
-  operators.forEach(item => item.classList.remove('clicked'));
-  document.querySelector('.decimal').classList.remove('ticked');
-  computationDisplay.classList.remove('exceeded');
 }
 
 function deleteChar(button) {
-  const lastNum = computationDisplay.innerText.charAt(computationDisplay.innerText.length -1);
-  const decimalCheck = document.querySelector('.decimal');
-  const operatorArray = ['+', '-', '*', '/']; 
-  if (operatorArray.includes(lastNum)) {
-    operators.forEach(item => item.classList.remove('clicked'));
-    computationDisplay.innerText = computationDisplay.innerText.slice(0, -2);
-  } else {
-    computationDisplay.innerText = computationDisplay.innerText.slice(0, -1);
-  }
-  if (lastNum === '.') {
-    decimalCheck.classList.remove('ticked');
+  if (secondValue.textContent) {
+    secondValue.textContent = secondValue.textContent.slice(0, -1)
+  } else if (!secondValue.textContent && operator.textContent) {
+    operator.textContent = operator.textContent.slice(0, -1);
+    firstValue.classList.remove('filled');
+    // add code to remove extra zeros
+  } else if (!secondValue.textContent && !operator.textContent) {
+    firstValue.textContent = firstValue.textContent.slice(0, -1);
   }
   if (resultDisplay.textContent != 0) {
     resultDisplay.textContent = 0;
   }
-  computationDisplay.classList.remove('exceeded');
 }
 
 function operatorButtons(button) {
-  const lastNum = computationDisplay.innerText.charAt(computationDisplay.innerText.length -1);
-  limitCharacters();
-  if (!computationDisplay.textContent || computationDisplay.classList.contains('exceeded')) {
-    console.log('empty');
-  } else if (button.classList.contains('clicked') || lastNum === '.') {
-    splitEquation();
-    if (!secondValue) {
-      console.log('invalid');
+  if (!firstValue.textContent) {
+    console.log('do nothing');
+  } else if (operator.textContent && secondValue.textContent) {
+    resultDisplay.textContent = operate(operator.textContent, Number(firstValue.textContent), Number(secondValue.textContent));
+    if (resultDisplay.textContent.length <= 12 && (resultDisplay.textContent < 10000000 && resultDisplay.textContent > -10000000)) {
+      firstValue.textContent = resultDisplay.textContent;
+      operator.textContent = button.textContent;
+      secondValue.textContent = '';
     } else {
-      resultDisplay.textContent = operate(operator, firstValue, secondValue);
-      computationDisplay.textContent = resultDisplay.textContent;
-      computationDisplay.textContent += ` ${button.textContent} `;
+      console.log('error');
     }
-    resultDisplay.classList.remove('evaluated');
-  } else {
-    operators.forEach(item => item.classList.add('clicked'))
-    computationDisplay.textContent += ` ${button.textContent} `;
-  };
+  }
+  else {
+    operator.textContent = button.textContent;
+    firstValue.classList.add('filled');
+  }
+  if (resultDisplay.textContent.length > 14) {
+    resultDisplay.textContent = resultDisplay.textContent.substring(0, 14)
+  }
+  resultDisplay.classList.remove('evaluated');
 }
 
 function isEqualTo(button) {
-  splitEquation();
-  if (!operator) {
-    resultDisplay.textContent = firstValue;
-    if (firstValue != 0) {
-      resultDisplay.classList.add('evaluated');
+  if (!operator.textContent || !secondValue.textContent) {
+    if (!firstValue.textContent) {
+      resultDisplay.textContent = 0;
+    } else {
+      resultDisplay.textContent = firstValue.textContent;
     }
-  } else if (!secondValue) {
-    console.log('invalid');
   } else {
-    resultDisplay.textContent = operate(operator, firstValue, secondValue);
-    resultDisplay.classList.add('evaluated');
+    resultDisplay.textContent = firstValue
+    resultDisplay.textContent = operate(operator.textContent, Number(firstValue.textContent), Number(secondValue.textContent));
   }
-  if (resultDisplay.textContent.length > 12) {
-    resultDisplay.textContent = resultDisplay.textContent.substring(0, 12)
+  if (resultDisplay.textContent.length > 14) {
+    resultDisplay.textContent = resultDisplay.textContent.substring(0, 14)
   }
-}
-
-function splitEquation() {
-  const computationArray = computationDisplay.innerText.split(' ');
-  firstValue = Number(computationArray[0]);
-  secondValue = Number(computationArray[2]);
-  operator = computationArray[1];
-}
-
-function limitCharacters() {
-  let exemptSpaces = computationDisplay.textContent.replace(/ /g, '').length;
-  console.log(exemptSpaces);
-  if (exemptSpaces >= 24) {
-    computationDisplay.classList.add('exceeded');
-  }
+  resultDisplay.classList.add('evaluated');
 }
