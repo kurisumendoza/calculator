@@ -112,12 +112,16 @@ function clear(button) {
 
 function deleteChar(button) {
   if (secondValue.textContent) {
-    secondValue.textContent = secondValue.textContent.slice(0, -1)
+    if (secondValue.textContent.charAt(0) === '-' && secondValue.textContent.length === 2) {
+      secondValue.textContent = secondValue.textContent.slice(0, -2);
+    } else secondValue.textContent = secondValue.textContent.slice(0, -1);
   } else if (!secondValue.textContent && operator.textContent) {
     operator.textContent = operator.textContent.slice(0, -1);
     firstValue.classList.remove('filled');
   } else if (!secondValue.textContent && !operator.textContent) {
-    firstValue.textContent = firstValue.textContent.slice(0, -1);
+    if (firstValue.textContent.charAt(0) === '-' && firstValue.textContent.length === 2) {
+      firstValue.textContent = firstValue.textContent.slice(0, -2);
+    } else firstValue.textContent = firstValue.textContent.slice(0, -1);
   }
   if (resultDisplay.textContent != 0) {
     resultDisplay.textContent = 0;
@@ -175,9 +179,9 @@ function isEqualTo(button) {
 }
 
 function plusMinus() {
-  if (firstValue.classList.contains('filled')) {
+  if (firstValue.classList.contains('filled') && secondValue.textContent != '') {
     secondValue.textContent = secondValue.textContent * -1;
-  } else {
+  } else if (!firstValue.classList.contains('filled')) {
     firstValue.textContent = firstValue.textContent * -1;
   }
 }
