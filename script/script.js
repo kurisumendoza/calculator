@@ -57,6 +57,8 @@ buttons.forEach(button => button.addEventListener('click', () => {
     deleteChar(button);
   } else if (button.classList.contains('equals')) {
     isEqualTo(button);
+  } else if (button.classList.contains('plus-minus')) {
+    plusMinus();
   }
 }));
 
@@ -114,7 +116,6 @@ function deleteChar(button) {
   } else if (!secondValue.textContent && operator.textContent) {
     operator.textContent = operator.textContent.slice(0, -1);
     firstValue.classList.remove('filled');
-    // add code to remove extra zeros
   } else if (!secondValue.textContent && !operator.textContent) {
     firstValue.textContent = firstValue.textContent.slice(0, -1);
   }
@@ -127,6 +128,7 @@ function operatorButtons(button) {
   if (!firstValue.textContent) {
     firstValue.textContent = '0';
     operator.textContent = button.textContent;
+    firstValue.classList.add('filled');
   } else if (operator.textContent && secondValue.textContent) {
     resultDisplay.textContent = operate(operator.textContent, Number(firstValue.textContent), Number(secondValue.textContent));
     if (resultDisplay.textContent.length <= 12 && (resultDisplay.textContent < 10000000 && resultDisplay.textContent > -10000000)) {
@@ -170,4 +172,12 @@ function isEqualTo(button) {
     secondValue.textContent = Number(secondValue.textContent);
   }
   resultDisplay.classList.add('evaluated');
+}
+
+function plusMinus() {
+  if (firstValue.classList.contains('filled')) {
+    secondValue.textContent = secondValue.textContent * -1;
+  } else {
+    firstValue.textContent = firstValue.textContent * -1;
+  }
 }
