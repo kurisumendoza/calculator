@@ -36,7 +36,9 @@ function operate(operator, a, b) {
       result = operation.function(a, b);
     }
   })
-  return result;
+  if (operator === '/' && b === 0) {
+    return 'Error'
+  } else return result;
 }
 
 const buttons = document.querySelectorAll('button');
@@ -44,7 +46,7 @@ const operators = document.querySelectorAll('.operator');
 const resultDisplay = document.querySelector('.result-display');
 resultDisplay.textContent = 0;
 
-buttons.forEach(button => button.addEventListener('click', () => {
+buttons.forEach(button => button.addEventListener('click', (e) => {
   if (button.classList.contains('number')) {
     numberButtons(button);
   } else if (button.classList.contains('decimal')) {
@@ -60,7 +62,22 @@ buttons.forEach(button => button.addEventListener('click', () => {
   } else if (button.classList.contains('plus-minus')) {
     plusMinus();
   }
+  e.target.blur();
 }));
+
+document.addEventListener('keyup', e => {
+  buttons.forEach(button => {
+    if (e.key === 'Backspace' && button.textContent === 'Del') {
+      button.click();
+    }
+    if (e.key === 'Enter' && button.textContent === '=') {
+      button.click();
+    }
+    if (e.key === button.textContent) {
+      button.click();
+    }
+  })
+})
 
 function numberButtons(button) {
   if (resultDisplay.classList.contains('evaluated')) {
@@ -163,7 +180,6 @@ function isEqualTo(button) {
       resultDisplay.textContent = Number(firstValue.textContent);
     }
   } else {
-    resultDisplay.textContent = firstValue
     resultDisplay.textContent = operate(operator.textContent, Number(firstValue.textContent), Number(secondValue.textContent));
   }
   if (resultDisplay.textContent.length > 14) {
