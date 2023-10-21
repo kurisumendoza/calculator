@@ -36,9 +36,9 @@ function operate(operator, a, b) {
       result = operation.function(a, b);
     }
   })
-  if (operator === '/' && b === 0) {
-    return 'ERROR';
-  } else return result;
+  if (result != 'Infinity') {
+    return result
+  } else return 'ERROR';
 }
 
 const buttons = document.querySelectorAll('button');
@@ -83,37 +83,41 @@ function numberButtons(button) {
   if (resultDisplay.classList.contains('evaluated')) {
     clear();
   }
-  if (firstValue.classList.contains('filled')) {
-    if (secondValue.textContent.length <= 12 && (secondValue.textContent < 1000000 && secondValue.textContent > -1000000)) {
-      if (secondValue.textContent.charAt(0) === '0' && !secondValue.textContent.includes('.')) {
-        if (!button.classList.contains('zero')) {
-          secondValue.textContent = secondValue.textContent.replace('0', button.textContent)
-        }
-      } else secondValue.textContent += button.textContent;
-    }
-  } else {
-    if (firstValue.textContent.length <= 12 && (firstValue.textContent < 1000000 && firstValue.textContent > -1000000)) {
-      if (firstValue.textContent.charAt(0) === '0' && !firstValue.textContent.includes('.')) {
-        if (!button.classList.contains('zero')) {
-          firstValue.textContent = firstValue.textContent.replace('0', button.textContent)
-        }
-      } else firstValue.textContent += button.textContent;
+  if (resultDisplay.textContent != 'ERROR') {
+    if (firstValue.classList.contains('filled')) {
+      if (secondValue.textContent.length <= 12 && (secondValue.textContent < 1000000 && secondValue.textContent > -1000000)) {
+        if (secondValue.textContent.charAt(0) === '0' && !secondValue.textContent.includes('.')) {
+          if (!button.classList.contains('zero')) {
+            secondValue.textContent = secondValue.textContent.replace('0', button.textContent)
+          }
+        } else secondValue.textContent += button.textContent;
+      }
+    } else {
+      if (firstValue.textContent.length <= 12 && (firstValue.textContent < 1000000 && firstValue.textContent > -1000000)) {
+        if (firstValue.textContent.charAt(0) === '0' && !firstValue.textContent.includes('.')) {
+          if (!button.classList.contains('zero')) {
+            firstValue.textContent = firstValue.textContent.replace('0', button.textContent)
+          }
+        } else firstValue.textContent += button.textContent;
+      }
     }
   }
 }
 
 function addDecimal(button) {
-  if (firstValue.classList.contains('filled')) {
-    if (!secondValue.textContent) {
-      secondValue.textContent += '0.';
-    } else if (!secondValue.textContent.includes('.')) {
-      secondValue.textContent += button.textContent;
-    }
-  } else {
-    if (!firstValue.textContent) {
-      firstValue.textContent += '0.';
-    } else if (!firstValue.textContent.includes('.')) {
-      firstValue.textContent += button.textContent;
+  if (resultDisplay.textContent != 'ERROR') {
+    if (firstValue.classList.contains('filled')) {
+      if (!secondValue.textContent) {
+        secondValue.textContent += '0.';
+      } else if (!secondValue.textContent.includes('.')) {
+        secondValue.textContent += button.textContent;
+      }
+    } else {
+      if (!firstValue.textContent) {
+        firstValue.textContent += '0.';
+      } else if (!firstValue.textContent.includes('.')) {
+        firstValue.textContent += button.textContent;
+      }
     }
   }
 }
@@ -150,6 +154,8 @@ function operatorButtons(button) {
     firstValue.textContent = '0';
     operator.textContent = button.textContent;
     firstValue.classList.add('filled');
+  } else if (operator === '/' && secondValue === 0) {
+      resultDisplay.textContent = 'ERROR';
   } else if (operator.textContent && secondValue.textContent) {
     resultDisplay.textContent = operate(operator.textContent, Number(firstValue.textContent), Number(secondValue.textContent));
     if (resultDisplay.textContent.length <= 12 && (resultDisplay.textContent < 10000000 && resultDisplay.textContent > -10000000)) {
@@ -157,7 +163,7 @@ function operatorButtons(button) {
       operator.textContent = button.textContent;
       secondValue.textContent = '';
     } else {
-      console.log('error');
+      resultDisplay.textContent = 'ERROR';
     }
   } else {
     operator.textContent = button.textContent;
@@ -191,7 +197,9 @@ function isEqualTo(button) {
     firstValue.textContent = Number(firstValue.textContent);
     secondValue.textContent = Number(secondValue.textContent);
   }
-  resultDisplay.classList.add('evaluated');
+  if (resultDisplay.textContent != 'ERROR') {
+    resultDisplay.classList.add('evaluated');
+  }
 }
 
 function plusMinus() {
