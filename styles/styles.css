@@ -8,26 +8,47 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #CEE4E6;
 }
 
 .calculator-container {
-  flex: 0 0 400px;
+  flex: 0 0 450px;
   padding: 30px;
   border-style: solid;
-  height: 620px;
+  border-width: 5PX;
+  border-color: darkslategray;
+  border-radius: 30px;
+  height: 650px;
+  background-color: #B3F5D9;
+  box-shadow: 10px 10px #335D4A,
+    10px 10px 0px 3px darkslategray;
 }
 
 .display {
   text-align: right;
+  border-style: dashed;
+  border-color: darkslategray;
+  border-radius: 25px;
+  margin-bottom: 10px;
+  background-color: #CBEFA9;
+  user-select: none;
 }
 
 .computation-display {
-  font-size: 50px;
-  height: 60px;
+  font-size: 26px;
+  height: 30px;
+  margin-top: 10px;
+  padding-right: 12px;
 }
 
 .result-display {
-  font-size: 80px;
+  font-size: 54px;
+  padding-right: 9px;
+  color: grey;
+}
+
+.evaluated {
+  color: black;
 }
 
 .button-container {
@@ -40,9 +61,28 @@
 
 button {
   flex: 0 0 24%;
-  padding: 0px;
+  padding: 10px;
   font-size: 50px;
+  border-style: dashed;
+  border-color: darkslategray;
+  border-radius: 25px;
+  border-width: 3px;
   aspect-ratio: 1/0.9;
+  background-color: #EFBFC9;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #D0BFEF;
+  border-style: ridge;
+  font-size: 50px;
+  transform: scale(1.1);
+  transition: 0.2s;
+}
+
+button:active {
+  background-color: #EFBFC9;
+  transform: scale(1);
 }
 
 .clear {
@@ -52,6 +92,58 @@ button {
 
 .clear,
 .delete,
-.plus-minus {
+.plus-minus,
+.decimal {
   font-size: 42px;
+  background-color: #DA9EAE;
+}
+
+.clear:hover,
+.delete:hover,
+.plus-minus:hover,
+.decimal:hover {
+  background-color: #D09EDA;
+  border-style: ridge;
+  font-size: 45px;
+  transform: scale(1.1);
+}
+
+.clear:active,
+.delete:active,
+.plus-minus:active,
+.decimal:active {
+  background-color: #DA9EAE;
+  transform: scale(1);
+}
+
+.operator {
+  background-color: #92E2EB;
+}
+
+.operator:hover {
+  background-color: #9892EB;
+  border-style: ridge;
+  font-size: 50px;
+  transform: scale(1.1);
+}
+
+.operator:active {
+  background-color: #92E2EB;
+  transform: scale(1);
+}
+
+.equals {
+  background-color: #66AEC4;
+}
+
+.equals:hover {
+  background-color: #7C66C4;
+  border-style: ridge;
+  font-size: 50px;
+  transform: scale(1.1);
+}
+
+.equals:active {
+  background-color: #66AEC4;
+  transform: scale(1);
 }

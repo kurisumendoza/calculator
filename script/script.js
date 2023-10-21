@@ -37,7 +37,7 @@ function operate(operator, a, b) {
     }
   })
   if (operator === '/' && b === 0) {
-    return 'Error'
+    return 'ERROR';
   } else return result;
 }
 
